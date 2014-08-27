@@ -270,7 +270,26 @@ class KEGGMainWindow(QMainWindow):
 		pass
 
 	def doExportResult(self):
-		pass
+		out = QFileDialog.getSaveFileName(self, "Save File...", "",
+			"All Files (*)")[0]
+		
+		if out == '': return
+		fp = open(out, "w")
+		it = QTreeWidgetItemIterator(self.tree)
+		while it.value():
+			item = it.value()
+			parent = item.parent()
+			child = item.childCount()
+			if parent and child:
+				head = '\t'
+			elif child == 0:
+				head = '\t\t'
+			else:
+				head = ''
+			if head != '\t\t':
+				fp.write("%s%s\n" % (head, "\t".join([item.text(i) for i in range(6)])))
+			it += 1
+		fp.close()
 
 	def doQuit(self):
 		self.close()
