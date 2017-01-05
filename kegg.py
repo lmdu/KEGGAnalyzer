@@ -281,13 +281,13 @@ class KEGGMainWindow(QMainWindow):
 			parent = item.parent()
 			child = item.childCount()
 			if parent and child:
-				head = '\t'
+				head = '  '
 			elif child == 0:
-				head = '\t\t'
+				head = '    '
 			else:
 				head = ''
-			if head != '\t\t':
-				fp.write("%s%s\n" % (head, "\t".join([item.text(i) for i in range(6)])))
+			
+			fp.write("%s%s\n" % (head, "\t".join([item.text(i) for i in range(6)])))
 			it += 1
 		fp.close()
 
@@ -350,10 +350,8 @@ def KEGGParaser(fh):
 			pathway = m.group(2).strip()
 		elif line[0] == 'D':
 			cols = line[1:].split(';')
-			m = re.search(">(\w+)<", cols[1])
-			ko = m.group(1)
+			ko, name = cols[1].strip().split('  ')
 			gene = cols[0].strip()
-			name = cols[1].split("</a>")[1].strip()
 			description = cols[2].split("[EC:")[0].strip()
 			try:
 				enzyme = cols[2].split("[EC:")[1].strip("]")
